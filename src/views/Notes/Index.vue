@@ -5,11 +5,25 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted, inject } from 'vue'
 
 export default defineComponent({
-    setup() {
-        
-    },
+  setup() {
+    const api = inject('$api')
+
+    const loadNotes = async() => { 
+      try {
+        const response = api.get('notes')
+        console.log(response)
+      } catch(error) {
+        console.log(error)
+      }
+    }
+
+    onMounted(() => {
+      loadNotes()
+    })
+  },
 })
 </script>
+

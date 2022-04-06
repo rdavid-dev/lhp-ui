@@ -9,10 +9,16 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    if(to.meta.auth) {
+    const loggedIn = JSON.parse(localStorage.getItem('user'))
+    console.log(to)
+    if(to.meta.auth && !loggedIn) {
        next('/login')
     } else {
-       next();
+       if(['Login','Register'].includes(to.name) && loggedIn) {
+        next('/');
+       } else {
+        next();
+       }
     }
 })
 

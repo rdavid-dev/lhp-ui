@@ -8,6 +8,12 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
     config => {
         config.headers['X-Requested-With'] = 'XMLHttpRequest'
+        
+        const user = JSON.parse(localStorage.getItem('user'))
+        if(user) {
+            config.headers['Authorization'] = `Bearer ${user.token}`
+        }
+
         return config
     },
     error => {

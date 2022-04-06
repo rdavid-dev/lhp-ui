@@ -50,7 +50,12 @@
                                     >{{ note.title }}</td>
                                     <td
                                         class="text-sm text-gray-900 font-light px-6 py-4"
-                                    >{{ note.description }}</td>
+                                    >{{ note.description }}
+                                    <div v-if="note.url">
+                                        <br>
+                                        <a :href="note.url" target="_blank" style="color:red">Click here to view the image.</a>
+                                    </div>
+                                    </td>
                                     <td class="text-sm text-gray-900 font-light px-6 py-4">
                                         <div class="flex">
                                             <button
@@ -106,9 +111,7 @@
     <FormModal :modal="showFormModal" @close="showFormModal = !showFormModal">
         <template #body>
             <form @submit.prevent="saveNotes" class="px-6 pb-4 space-y-6 lg:px-8 sm:pb-6 xl:pb-8">
-                <h3
-                    class="text-xl font-medium text-gray-900 dark:text-white"
-                >Add your new Notes</h3>
+                <h3 class="text-xl font-medium text-gray-900 dark:text-white">Add your new Notes</h3>
                 <div>
                     <label
                         for="title"
@@ -133,9 +136,19 @@
                         v-model="description"
                         placeholder="Notes Description"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                    >
-
-                    </textarea>
+                    ></textarea>
+                </div>
+                <div>
+                    <label
+                        for="file"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    >File</label>
+                    <input
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                        type="file"
+                        id="file"
+                        @change="onFileChange"
+                    />
                 </div>
                 <button
                     type="submit"
@@ -160,19 +173,30 @@ export default defineComponent({
     },
     setup() {
         const api = inject('$api')
-        const router =useRouter()
+        const router = useRouter()
         const notes = ref([])
         const showFormModal = ref(false)
         const showModal = ref(false)
         const noteIDSelected = ref(0)
         const formNotes = reactive({
             title: '',
-            description: ''
+            description: '',
+            file: ''
         })
 
+        const onFileChange = (e) => {
+            formNotes.file = e.target.files[0]
+        }
         const saveNotes = async () => {
             try {
-                await api.post('notes', formNotes)
+                let data = new FormData();
+                data.append('title', formNotes.title);
+                data.append('description', formNotes.description);
+                data.append('note_file', formNotes.file);
+
+                await api.post('notes', data, {
+                    'content-type': 'multipart/form-data'
+                })
                 clearForm()
                 showFormModal.value = false
                 await loadNotes()
@@ -222,7 +246,8 @@ export default defineComponent({
             showModal,
             deleteNotes,
             processDeleteNote,
-            saveNotes
+            saveNotes,
+            onFileChange
         }
     },
 })

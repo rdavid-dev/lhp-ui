@@ -170,11 +170,17 @@ export default defineComponent({
         const saveNotes = async () => {
             try {
                 await api.post('notes', formNotes)
+                clearForm()
                 showFormModal.value = false
                 await loadNotes()
             } catch (error) {
                 console.log(error)
             }
+        }
+
+        const clearForm = () => {
+            formNotes.title = ''
+            formNotes.description = ''
         }
 
         const deleteNotes = (note_id) => {

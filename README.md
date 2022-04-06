@@ -1,8 +1,13 @@
-# Vue 3 + Vite
+## LHP UI
+This is the Single Page Application for the challenge, and for this I used Vite config and Composition API for the structure.
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+NOTE: This project doesn't need docker to run
 
-## Recommended IDE Setup
+## Prerequisites
+- NodeJS
 
-- [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
-# lhp-ui
+## Steps to run this project
+- Clone this project anywhere on your machine
+- Go to the folder `cd lhp-ui`
+- Run `npm install` and `npm run dev`
+- Check your .env file and make sure your API is pointed on the correct url which is `localhost:5010`

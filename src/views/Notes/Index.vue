@@ -8,7 +8,7 @@
                 Notes
             </label>
             <button
-                @click="addNewArticle"
+                @click="showFormModal = !showFormModal"
                 class="float-right h-10 px-5 m-2 text-blue-100 transition-colors duration-150 bg-blue-600 rounded-lg focus:shadow-outline hover:bg-blue-700"
             >
                 Create
@@ -42,7 +42,9 @@
                             </thead>
                             <tbody class="border-b">
                                 <tr v-for="note in notes" :key="note.id" class="bg-white border-b">
-                                    <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ note.id }}</td>
+                                    <td
+                                        class="px-6 py-4 text-sm font-medium text-gray-900"
+                                    >{{ note.id }}</td>
                                     <td
                                         class="text-sm text-gray-900 font-light px-6 py-4"
                                     >{{ note.title }}</td>
@@ -55,14 +57,40 @@
                                                 type="button"
                                                 class="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800"
                                             >
-                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                                <svg
+                                                    class="w-6 h-6"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                                    />
+                                                </svg>
                                             </button>
                                             <button
                                                 @click="deleteNotes(note.id)"
                                                 type="button"
                                                 class="text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800"
                                             >
-                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                <svg
+                                                    class="w-6 h-6"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M6 18L18 6M6 6l12 12"
+                                                    />
+                                                </svg>
                                             </button>
                                         </div>
                                     </td>
@@ -74,27 +102,76 @@
             </div>
         </div>
     </section>
-    <DeleteModal :modal="showModal" @execute="processDeleteNote" @close="toggleDeleteModal"/>
+    <FormModal :modal="showFormModal" @close="showFormModal = !showFormModal">
+        <template #body>
+            <form @submit.prevent="saveNotes" class="px-6 pb-4 space-y-6 lg:px-8 sm:pb-6 xl:pb-8">
+                <h3
+                    class="text-xl font-medium text-gray-900 dark:text-white"
+                >Add your new Notes</h3>
+                <div>
+                    <label
+                        for="title"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    >Title</label>
+                    <input
+                        type="text"
+                        v-model="title"
+                        id="title"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                        placeholder="Notes Title"
+                        required
+                    />
+                </div>
+                <div>
+                    <label
+                        for="description"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    >Description</label>
+                    <textarea
+                        id="description"
+                        v-model="description"
+                        placeholder="Notes Description"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    >
+
+                    </textarea>
+                </div>
+                <button
+                    type="submit"
+                    class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >Save Notes</button>
+            </form>
+        </template>
+    </FormModal>
+    <DeleteModal :modal="showModal" @execute="processDeleteNote" @close="showModal = !showModal" />
 </template>
 
 <script>
-import { defineComponent, onMounted, ref, inject } from 'vue'
+import { defineComponent, onMounted, ref, inject, reactive, toRefs } from 'vue'
+import FormModal from '@/components/Modals/Form.vue'
 import DeleteModal from '@/components/Modals/Delete.vue'
 
 export default defineComponent({
     components: {
+        FormModal,
         DeleteModal
     },
     setup() {
         const api = inject('$api')
         const notes = ref([])
+        const showFormModal = ref(false)
         const showModal = ref(false)
         const noteIDSelected = ref(0)
+        const formNotes = reactive({
+            title: '',
+            description: ''
+        })
 
-        const loadNotes = async () => {
+        const saveNotes = async () => {
             try {
-                const response = await api.get('notes')
-                notes.value = response.data
+                await api.post('notes', formNotes)
+                showFormModal.value = false
+                await loadNotes()
             } catch (error) {
                 console.log(error)
             }
@@ -105,7 +182,7 @@ export default defineComponent({
             showModal.value = true
         }
 
-        const processDeleteNote = async() => {
+        const processDeleteNote = async () => {
             try {
                 await api.destroy(`notes/${noteIDSelected.value}`)
                 loadNotes()
@@ -115,10 +192,14 @@ export default defineComponent({
             }
         }
 
-        const toggleDeleteModal = () => {
-            showModal.value = !showModal.value
+        const loadNotes = async () => {
+            try {
+                const response = await api.get('notes')
+                notes.value = response.data
+            } catch (error) {
+                console.log(error)
+            }
         }
-        
 
         onMounted(() => {
             loadNotes()
@@ -126,10 +207,12 @@ export default defineComponent({
 
         return {
             notes,
+            ...toRefs(formNotes),
+            showFormModal,
             showModal,
             deleteNotes,
-            toggleDeleteModal,
-            processDeleteNote
+            processDeleteNote,
+            saveNotes
         }
     },
 })

@@ -1,7 +1,8 @@
 <template>
-  <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
+  <main>
+    <h1>LHP</h1>
+    <router-view></router-view>
+  </main>
 </template>
 
 <script>

@@ -14,6 +14,10 @@ export default {
         LOGIN(state, user) {
             state.user = user.user
             state.loggedIn = true
+        },
+        LOGOUT(state) {
+            state.user = null
+            state.loggedIn = false
         }
     },
     actions: {
@@ -29,7 +33,15 @@ export default {
             )
         },
         logout({commit}) {
-            
+            return AuthService.logout()
+                .then(response => {
+                    commit('LOGOUT')
+                    return Promise.resolve(response)
+                },
+                error => {
+                    return Promise.reject(error);
+                }
+            )
         }
     }
 }

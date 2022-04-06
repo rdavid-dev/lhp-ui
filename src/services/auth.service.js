@@ -1,4 +1,4 @@
-import { post } from "@/core/apis"
+import { post, get } from "@/core/apis"
 
 class AuthService {
     login(user) {
@@ -7,6 +7,13 @@ class AuthService {
                 localStorage.setItem('user', JSON.stringify(response.data))
                 return response.data
             });
+    }
+
+    logout() {
+        return get('logout').then(response => {
+            localStorage.removeItem('user')
+            return response
+        })
     }
 }
 

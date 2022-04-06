@@ -1,4 +1,11 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 
-createApp(App).mount('#app')
+import '@/assets/app.css'
+
+const app = createApp(App)
+
+import core from "@/core"
+core(app)
+
+app.mount('#app')

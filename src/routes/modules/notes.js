@@ -1,6 +1,6 @@
 export default [
     {
-        path: "/notes",
+        path: "/",
         name: "Notes List",
         component: () => import("@/views/Notes/Index.vue" /* webpackChunkName: "Views/Notes/Index" */),
         meta: {

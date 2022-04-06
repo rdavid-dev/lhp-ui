@@ -11,3 +11,9 @@ NOTE: This project doesn't need docker to run
 - Go to the folder `cd lhp-ui`
 - Run `npm install` and `npm run dev`
 - Check your .env file and make sure your API is pointed on the correct url which is `localhost:5010`
+
+## NOTE
+UX are simplified on this project, so other I didn't use any packages such as.
+- VueSweetLoader
+- ProgressSpinnner
+- VeeValidate

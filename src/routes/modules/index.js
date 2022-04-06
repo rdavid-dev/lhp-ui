@@ -4,7 +4,20 @@ import notes from "@/routes/modules/notes"
 
 export default [
     ...auth,
-    ...notes,
+    {
+        path: '/',
+        name: 'Default',
+        redirect: {
+            name: 'notes.list'
+        },
+        component: () => import("@/views/Layouts/Default.vue" /* webpackChunkName: "Views/Notes/Edit" */),
+        children: [
+            ...notes,
+        ],
+        meta: {
+            auth: true
+        }
+    },
     ...errors,
     {
         path: '/:pathMatch(.*)*',

@@ -1,7 +1,7 @@
 export default [
     {
-        path: "/",
-        name: "Notes List",
+        path: "/notes",
+        name: "notes.list",
         component: () => import("@/views/Notes/Index.vue" /* webpackChunkName: "Views/Notes/Index" */),
         meta: {
             auth: true

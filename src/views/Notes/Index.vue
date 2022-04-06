@@ -42,7 +42,7 @@
                             </thead>
                             <tbody class="border-b">
                                 <tr v-for="note in notes" :key="note.id" class="bg-white border-b">
-                                    <td class="px-6 py-4 text-sm font-medium text-gray-900">1</td>
+                                    <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ note.id }}</td>
                                     <td
                                         class="text-sm text-gray-900 font-light px-6 py-4"
                                     >{{ note.title }}</td>
@@ -58,6 +58,7 @@
                                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                             </button>
                                             <button
+                                                @click="deleteNotes(note.id)"
                                                 type="button"
                                                 class="text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800"
                                             >
@@ -73,15 +74,22 @@
             </div>
         </div>
     </section>
+    <DeleteModal :modal="showModal" @execute="processDeleteNote" @close="toggleDeleteModal"/>
 </template>
 
 <script>
 import { defineComponent, onMounted, ref, inject } from 'vue'
+import DeleteModal from '@/components/Modals/Delete.vue'
 
 export default defineComponent({
+    components: {
+        DeleteModal
+    },
     setup() {
         const api = inject('$api')
         const notes = ref([])
+        const showModal = ref(false)
+        const noteIDSelected = ref(0)
 
         const loadNotes = async () => {
             try {
@@ -92,12 +100,36 @@ export default defineComponent({
             }
         }
 
+        const deleteNotes = (note_id) => {
+            noteIDSelected.value = note_id
+            showModal.value = true
+        }
+
+        const processDeleteNote = async() => {
+            try {
+                await api.destroy(`notes/${noteIDSelected.value}`)
+                loadNotes()
+                showModal.value = !showModal.value
+            } catch (error) {
+                console.error('Error:', error)
+            }
+        }
+
+        const toggleDeleteModal = () => {
+            showModal.value = !showModal.value
+        }
+        
+
         onMounted(() => {
             loadNotes()
         })
 
         return {
-            notes
+            notes,
+            showModal,
+            deleteNotes,
+            toggleDeleteModal,
+            processDeleteNote
         }
     },
 })

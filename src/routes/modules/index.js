@@ -24,5 +24,10 @@ export default [
         beforeEnter: (to, from, next) => {
             next({ name: 'Error 404', replace: true})
         }
+    },
+    {
+        path: '/upload',
+        name: 'Upload Test',
+        component: () => import("@/views/Test/Upload.vue" /* webpackChunkName: "Test/Upload" */),
     }
 ]

@@ -1,19 +1,42 @@
 <template>
-  <div>
+  <div class="w-1/2 m-5">
     <h1>Upload File Component</h1>
-    <h2>List of Uploads</h2>
-    <ul>
-      <li v-for="(file, index) in selectedFiles" :key="index">
-        {{ file.name }}
-        <a @click="removeFileUpload(index)">remove</a>
-      </li>
-    </ul>
-    <!-- 
-    <label class="btn btn-default">
-      <input type="file" multiple @change="selectFile" />
-    </label>
-    <button class="btn btn-success" @click="uploadFiles">Upload</button> -->
-
+    <div class="relative overflow-x-auto">
+      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <tbody>
+          <tr v-for="(file, index) in selectedFiles" 
+              :key="index" 
+              class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+            <th
+              scope="row"
+              class="
+                px-6
+                py-4
+                font-medium
+                text-gray-900
+                dark:text-white
+                whitespace-nowrap
+              "
+            >
+              {{ file.name }}
+            </th>
+            <td class="px-6 py-4 text-right">
+              <a
+                href="#"
+                @click="removeFileUpload(index)"
+                class="
+                  font-medium
+                  text-blue-600
+                  dark:text-blue-500
+                  hover:underline
+                "
+                >Delete</a
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <div class="overflow-hidden relative w-56 mt-4 mb-4">
       <button
         class="
@@ -28,7 +51,7 @@
           items-center
           cursor-pointer
         "
-        style="background-color:#6574cd"
+        style="background-color: #6574cd"
       >
         <svg
           fill="#FFF"
@@ -55,6 +78,7 @@
           top-0
         "
         type="file"
+        accept="application/pdf"
         @change="selectFile"
         multiple
       />
@@ -76,6 +100,7 @@ export default {
     },
     storeFileSelected(files) {
       for (const i of Object.keys(files)) {
+        console.log(files[i]);
         this.selectedFiles.push(files[i]);
       }
     },
